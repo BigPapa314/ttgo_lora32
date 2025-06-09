@@ -1,4 +1,4 @@
 [workspace]
-members = []
+members = ["ttgo_blinky"]
 default-members = []
 resolver = "3"
