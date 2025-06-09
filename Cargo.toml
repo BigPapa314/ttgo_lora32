@@ -1,5 +1,5 @@
 [workspace]
-members = [ "blinky","ttgo_blinky"]
+members = ["blinky", "ttgo_blinky", "ssd1306", "ttgo_ssd1306"]
 default-members = []
 resolver = "3"
 
