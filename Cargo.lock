@@ -1576,6 +1576,17 @@ dependencies = [
 name = "ttgo_ssd1306"
 version = "0.1.0"
 dependencies = [
+ "embedded-hal 1.0.0",
+ "embuild",
+ "esp-idf-svc",
+ "log",
+ "ssd1306",
+]
+
+[[package]]
+name = "ttgo_sx1276"
+version = "0.1.0"
+dependencies = [
  "embedded-graphics",
  "embedded-hal 1.0.0",
  "embuild",

@@ -1,3 +1,11 @@
 {
-    "rust-analyzer.check.allTargets": false
+    "rust-analyzer.diagnostics.styleLints.enable": true,
+    "rust-analyzer.cargo.allTargets": false,
+    "rust-analyzer.cargo.buildScripts.overrideCommand": [
+        "cargo check --quiet --workspace --message-format=json --keep-going"
+    ],
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.check.targets": [
+        "xtensa-esp32-none-elf"
+    ]
 }

@@ -1,12 +1,12 @@
 [package]
-name = "ttgo_ssd1306"
+name = "ttgo_sx1276"
 version = "0.1.0"
 authors = ["Thomas Kilian <thomas-kilian@gmx.net>"]
 edition = "2021"
 rust-version = "1.77"
 
 [[bin]]
-name = "ttgo_ssd1306"
+name = "ttgo_sx1276"
 harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
 
 [features]
@@ -18,6 +18,7 @@ experimental = ["esp-idf-svc/experimental"]
 log = "0.4"
 esp-idf-svc = { version = "0.51", features = ["critical-section", "embassy-time-driver", "embassy-sync"] }
 ssd1306 = "0.10.0"
+embedded-graphics = "0.8.1"
 embedded-hal = { version = "1.0.0" }
 
 [build-dependencies]
