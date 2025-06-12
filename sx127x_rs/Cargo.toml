@@ -1,0 +1,9 @@
+[package]
+name = "sx127x_rs"
+version = "0.1.0"
+edition = "2024"
+keywords = ["embedded-hal", "sx127x", "lora"]
+
+[dependencies]
+bit_field = "0.10"
+embedded-hal = "1"
