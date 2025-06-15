@@ -5,5 +5,8 @@ edition = "2024"
 keywords = ["embedded-hal", "sx127x", "lora"]
 
 [dependencies]
+log = "0.4"
 bit_field = "0.10"
 embedded-hal = "1"
+proc-bitfield = "0.5.2"
+sx127x_rs_macro = { version = "0.1.0", path = "macro" }

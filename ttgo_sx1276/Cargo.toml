@@ -19,6 +19,10 @@ log = "0.4"
 esp-idf-svc = { version = "0.51", features = ["critical-section", "embassy-time-driver", "embassy-sync"] }
 embedded-hal = { version = "1.0.0" }
 sx127x_lora = "0.3.1"
+sx127x_rs = { version = "0.1.0", path = "../sx127x_rs" }
+# syn = "2.0.103"
+# quote = "1.0.40"
+darling = "0.20.11"
 
 [build-dependencies]
 embuild = "0.33"

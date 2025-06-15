@@ -16,31 +16,31 @@ fn main() {
 
     let peripherals = Peripherals::take().unwrap();
 
-    let spi2 = peripherals.spi2;
+    // let spi2 = peripherals.spi2;
 
-    let sclk = peripherals.pins.gpio5;
-    let miso = peripherals.pins.gpio19;
-    let mosi = peripherals.pins.gpio27;
-    let cs = peripherals.pins.gpio18;
-    let rst = peripherals.pins.gpio23;
-    // let dio = peripherals.pins.gpio26;
+    // let sclk = peripherals.pins.gpio5;
+    // let miso = peripherals.pins.gpio19;
+    // let mosi = peripherals.pins.gpio27;
+    // let cs = peripherals.pins.gpio18;
+    // let rst = peripherals.pins.gpio23;
+    // // let dio = peripherals.pins.gpio26;
 
-    log::info!("Starting SPI loopback test");
-    // let spi_driver_config = SpiDriverConfig::new().baudrate(18.MHz().into());
-    let spi_driver_config = SpiDriverConfig::new();
-    let spi_driver = SpiDriver::new(spi2, sclk, miso, Some(mosi), &spi_driver_config).unwrap();
-    let spi_config = SpiConfig::new().baudrate(18.MHz().into());
-    let spi = SpiBusDriver::new(spi_driver, &spi_config).unwrap();
-    log::info!("spistuff");
+    // log::info!("Starting SPI loopback test");
+    // // let spi_driver_config = SpiDriverConfig::new().baudrate(18.MHz().into());
+    // let spi_driver_config = SpiDriverConfig::new();
+    // let spi_driver = SpiDriver::new(spi2, sclk, miso, Some(mosi), &spi_driver_config).unwrap();
+    // let spi_config = SpiConfig::new().baudrate(18.MHz().into());
+    // let spi = SpiBusDriver::new(spi_driver, &spi_config).unwrap();
+    // log::info!("spistuff");
 
-    let mut lora = sx127x_lora::LoRa::new(
-        spi,
-        PinDriver::input_output(cs).unwrap(),
-        PinDriver::input_output(rst).unwrap(),
-        915_000_000,
-        FreeRtos,
-    )
-    .unwrap();
+    // let mut lora = sx127x_lora::LoRa::new(
+    //     spi,
+    //     PinDriver::input_output(cs).unwrap(),
+    //     PinDriver::input_output(rst).unwrap(),
+    //     915_000_000,
+    //     FreeRtos,
+    // )
+    // .unwrap();
 
-    log::info!("sx127x_lora has been initialized");
+    sx127x_rs::test();
 }
