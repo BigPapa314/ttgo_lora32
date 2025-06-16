@@ -16,21 +16,28 @@ fn main() {
 
     let peripherals = Peripherals::take().unwrap();
 
-    let spi2 = peripherals.spi2;
+    let spi_hw = peripherals.spi2;
 
     let sclk = peripherals.pins.gpio5;
     let miso = peripherals.pins.gpio19;
     let mosi = peripherals.pins.gpio27;
     let cs = peripherals.pins.gpio18;
-    let rst = peripherals.pins.gpio23;
+    let rst = PinDriver::output(peripherals.pins.gpio23).unwrap();
     // let dio = peripherals.pins.gpio26;
 
     log::info!("Starting SPI loopback test");
     // let spi_driver_config = SpiDriverConfig::new().baudrate(18.MHz().into());
     let spi_driver_config = SpiDriverConfig::new();
-    let spi_driver = SpiDriver::new(spi2, sclk, miso, Some(mosi), &spi_driver_config).unwrap();
-    let spi_config = SpiConfig::new().baudrate(18.MHz().into());
+    let spi_driver = SpiDriver::new(spi_hw, sclk, miso, Some(mosi), &spi_driver_config).unwrap();
+    let spi_config = SpiConfig::new()
+        .baudrate(20.kHz().into())
+        .data_mode(sx127x_rs::MODE)
+        .allow_pre_post_delays(true)
+        .cs_pre_delay_us(10)
+        .cs_post_delay_us(10)
+        .polling(true);
     let spi = SpiDeviceDriver::new(spi_driver, Some(cs), &spi_config).unwrap();
+
     log::info!("spistuff");
 
     // let mut lora = sx127x_lora::LoRa::new(
@@ -42,5 +49,5 @@ fn main() {
     // )
     // .unwrap();
 
-    sx127x_rs::test(spi);
+    sx127x_rs::test(FreeRtos, spi, rst);
 }

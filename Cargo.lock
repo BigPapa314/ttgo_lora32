@@ -1658,6 +1658,7 @@ dependencies = [
  "embedded-hal 1.0.0",
  "embuild",
  "esp-idf-svc",
+ "esp-idf-sys",
  "log",
  "sx127x_lora",
  "sx127x_rs",

@@ -23,6 +23,7 @@ sx127x_rs = { version = "0.1.0", path = "../sx127x_rs" }
 # syn = "2.0.103"
 # quote = "1.0.40"
 darling = "0.20.11"
+esp-idf-sys = "0.36.1"
 
 [build-dependencies]
 embuild = "0.33"
