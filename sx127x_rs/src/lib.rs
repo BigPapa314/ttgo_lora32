@@ -1,47 +1,48 @@
 #![no_std]
 
-use proc_bitfield::bitfield;
+mod register;
 
-use sx127x_rs_macro::register;
+use embedded_hal::spi::Operation;
+use embedded_hal::spi::SpiDevice;
+use register::Register;
 
-trait Register: Into<u8> + core::fmt::Debug {
-    const ADDRESS: u8;
-    fn address(&self) -> u8 {
-        Self::ADDRESS
-    }
-}
-
-bitfield! {
-    /// A bitfield showcasing how to specify bit ranges.
-    #[derive(Clone, Copy, PartialEq, Eq)]
-    #[register(address = 0x12)]
-    pub struct BitRanges(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
-        // A single field spanning the entire bitfield, using an unbounded range:
-        pub whole_bitfield: u32 @ ..,                 // Bits 0 to 31
-
-        // Multi-bit field, specified using an inclusive range:
-        pub inclusive_range: u8 @ 0..=3,              // Bits 0 to 3
-
-        // Multi-bit field, specified using an exclusive range:
-        pub exclusive_range: u8 @ 4..7,               // Bits 4 to 6
-
-        // Multi-bit field specified using its start bit and length:
-        pub start_and_length: u8 @ 7; 1,              // Bits 7 to 8
-    }
+fn print_value(value: &[u8]) {
+    log::info!("reg value: {value:#x?}");
 }
 
 fn print_register(reg: impl Register) {
-    log::info!("reg {reg:#?}");
+    log::info!("reg {reg:#x?}");
     let address: u8 = reg.address();
     log::info!("reg address: {address}");
-    let value: u8 = reg.into();
-    log::info!("reg value: {value}");
+    print_value(reg.as_ref());
 }
 
-pub fn test() {
+struct Sx127x<SPI> {
+    spi: SPI,
+}
+
+impl<SPI> Sx127x<SPI>
+where
+    SPI: SpiDevice,
+{
+    fn new(spi: SPI) -> Self {
+        Self { spi }
+    }
+
+    fn read<REG: Register>(&mut self) -> Result<REG, SPI::Error> {
+        let mut result = REG::default();
+        self.spi.transaction(&mut [
+            Operation::Write(&[result.address()]),
+            Operation::Read(result.as_mut()),
+        ])?;
+        Ok(result)
+    }
+}
+
+pub fn test(spi: impl SpiDevice) {
     log::info!("Test start!");
 
-    let range = BitRanges(10);
+    let range = register::fsk_ook::BitRanges::default();
     log::info!("range: {range:#?}");
     let exclusive_range = range.exclusive_range();
     log::info!("exclusive_range: {exclusive_range}");
@@ -49,4 +50,38 @@ pub fn test() {
     log::info!("value: {value}");
 
     print_register(range);
+
+    let mut reg_fr = register::lora::RegFr::default().with_frf(0x112233);
+    print_register(reg_fr);
+    let frequency_mhz = reg_fr.frequency_mhz();
+    log::info!("reg_fr frequency: {frequency_mhz}");
+    reg_fr.set_frequency_mhz(434_000_000);
+    print_register(reg_fr);
+    let frequency_mhz = reg_fr.frequency_mhz();
+    log::info!("reg_fr frequency: {frequency_mhz}");
+    reg_fr.set_frequency_mhz(1_000_000);
+    print_register(reg_fr);
+    let frequency_mhz = reg_fr.frequency_mhz();
+    log::info!("reg_fr frequency: {frequency_mhz}");
+    reg_fr.set_frequency_mhz(500_000);
+    print_register(reg_fr);
+    let frequency_mhz = reg_fr.frequency_mhz();
+    log::info!("reg_fr frequency: {frequency_mhz}");
+    reg_fr.set_frequency_mhz(62);
+    print_register(reg_fr);
+    let frequency_mhz = reg_fr.frequency_mhz();
+    log::info!("reg_fr frequency: {frequency_mhz}");
+
+    let mut driver = Sx127x::new(spi);
+    let op_mode = driver
+        .read::<register::lora::RegOpMode>()
+        .expect("spi read failure");
+    log::info!("read op_mode");
+    print_register(op_mode);
+
+    let fr = driver
+        .read::<register::lora::RegFr>()
+        .expect("spi read failure");
+    log::info!("read fr");
+    print_register(fr);
 }
