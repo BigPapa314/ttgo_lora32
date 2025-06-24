@@ -1,3 +1,6 @@
+//! Low-power mode. In this mode only SPI and configuration registers are accessible. Lora FIFO is not accessible.
+//! Note that this is the only mode permissible to switch between FSK/OOK mode and LoRa mode.
+
 use crate::driver::Sx127xLoraDriver;
 use crate::error::Sx127xLoraError;
 use sx127x_rs_driver::Sx127x;
