@@ -41,9 +41,9 @@ pub fn register(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
 
-    let (impl_default, impl_into_slice) = if let Some(default) = default_u8 {
+    let (impl_const_default, impl_into_slice) = if let Some(default) = default_u8 {
         (
-            quote! {impl Default for #struct_name { fn default() -> Self { Self(#default) } }},
+            quote! { impl #struct_name { pub const fn const_default() -> Self { Self(#default) } }},
             quote! {
                 impl AsRef<[u8]> for #struct_name {
                     fn as_ref(&self) -> &[u8] {
@@ -59,7 +59,7 @@ pub fn register(args: TokenStream, input: TokenStream) -> TokenStream {
         )
     } else if let Some(default) = default_u16 {
         (
-            quote! {impl Default for #struct_name { fn default() -> Self { Self(#default) } }},
+            quote! { impl #struct_name { pub const fn const_default() -> Self { Self(#default) } }},
             quote! {
                 impl AsRef<[u8]> for #struct_name {
                     fn as_ref(&self) -> &[u8] {
@@ -81,7 +81,7 @@ pub fn register(args: TokenStream, input: TokenStream) -> TokenStream {
         )
     } else if let Some(default) = default_u24 {
         (
-            quote! {impl Default for #struct_name { fn default() -> Self { Self(#default) } }},
+            quote! { impl #struct_name { pub const fn const_default() -> Self { Self(#default) } }},
             quote! {
                 impl AsRef<[u8]> for #struct_name {
                     fn as_ref(&self) -> &[u8] {
@@ -103,7 +103,7 @@ pub fn register(args: TokenStream, input: TokenStream) -> TokenStream {
         )
     } else if let Some(default) = default_u32 {
         (
-            quote! {impl Default for #struct_name { fn default() -> Self { Self(#default) } }},
+            quote! { impl #struct_name { pub const fn const_default() -> Self { Self(#default) } }},
             quote! {
                 impl AsRef<[u8]> for #struct_name {
                     fn as_ref(&self) -> &[u8] {
@@ -134,7 +134,8 @@ pub fn register(args: TokenStream, input: TokenStream) -> TokenStream {
     quote! {
         #struct_definition
         impl Register for #struct_name { const ADDRESS: u8 = #address; }
-        #impl_default
+        #impl_const_default
+        impl Default for #struct_name { fn default() -> Self { Self::const_default() } }
         #impl_into_slice
     }
     .into()

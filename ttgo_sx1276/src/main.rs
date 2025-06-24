@@ -4,6 +4,8 @@ use esp_idf_svc::hal::peripherals::Peripherals;
 use esp_idf_svc::hal::prelude::*;
 use esp_idf_svc::hal::spi::*;
 
+use sx127x_rs::prelude::*;
+
 fn main() {
     // It is necessary to call this function once. Otherwise some patches to the runtime
     // implemented by esp-idf-sys might not link properly. See https://github.com/esp-rs/esp-idf-template/issues/71
@@ -28,26 +30,21 @@ fn main() {
     log::info!("Starting SPI loopback test");
     // let spi_driver_config = SpiDriverConfig::new().baudrate(18.MHz().into());
     let spi_driver_config = SpiDriverConfig::new();
-    let spi_driver = SpiDriver::new(spi_hw, sclk, miso, Some(mosi), &spi_driver_config).unwrap();
+    let spi_driver = SpiDriver::new(spi_hw, sclk, mosi, Some(miso), &spi_driver_config).unwrap();
     let spi_config = SpiConfig::new()
-        .baudrate(20.kHz().into())
-        .data_mode(sx127x_rs::MODE)
-        .allow_pre_post_delays(true)
-        .cs_pre_delay_us(10)
-        .cs_post_delay_us(10)
-        .polling(true);
+        .baudrate(20.MHz().into())
+        .data_mode(sx127x_rs::driver::MODE);
     let spi = SpiDeviceDriver::new(spi_driver, Some(cs), &spi_config).unwrap();
 
     log::info!("spistuff");
 
-    // let mut lora = sx127x_lora::LoRa::new(
-    //     spi,
-    //     PinDriver::input_output(cs).unwrap(),
-    //     PinDriver::input_output(rst).unwrap(),
-    //     915_000_000,
-    //     FreeRtos,
-    // )
-    // .unwrap();
+    let driver = Sx127xDriver::new(FreeRtos, spi, rst).unwrap();
+    let lora = driver.into_lora();
+    test_lora(lora);
+}
 
-    sx127x_rs::test(FreeRtos, spi, rst);
+pub fn test_lora(mut lora: impl Sx127xLora) {
+    log::info!("Test start!");
+
+    lora.check_version().expect("version is not known");
 }

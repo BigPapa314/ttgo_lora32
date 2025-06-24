@@ -1,13 +1,14 @@
 [package]
-name = "sx127x_rs"
+name = "sx127x_rs_driver"
 version = "0.1.0"
 edition = "2024"
 keywords = ["embedded-hal", "sx127x", "lora"]
+license = "MIT"
 
 [dependencies]
 log = "0.4"
 bit_field = "0.10"
 embedded-hal = "1"
 proc-bitfield = "0.5.2"
-sx127x_rs_macro = { version = "0.1.0", path = "macro" }
+sx127x_rs_macro = { version = "0.1.0", path = "../sx127x_rs_macro" }
 int-enum = "1.2.0"

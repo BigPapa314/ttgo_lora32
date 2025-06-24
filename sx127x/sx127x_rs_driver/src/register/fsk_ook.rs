@@ -7,7 +7,7 @@ bitfield! {
     /// A bitfield showcasing how to specify bit ranges.
     #[derive(Clone, Copy, PartialEq, Eq)]
     #[register(address = 0x12, default_u8 = 0x10)]
-    pub struct BitRanges(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
+    pub struct BitRanges(u8): Debug, FromStorage, IntoStorage, DerefStorage {
         // A single field spanning the entire bitfield, using an unbounded range:
         pub whole_bitfield: u32 @ ..,                 // Bits 0 to 31
 
@@ -26,7 +26,7 @@ bitfield! {
     /// FIFO data input/output
     #[derive(Clone, Copy, PartialEq, Eq)]
     #[register(address = 0x00, default_u8 = 0x00)]
-    pub struct RegFifo(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
+    pub struct RegFifo(u8): Debug, FromStorage, IntoStorage, DerefStorage {
         pub data: u8 @ ..,
     }
 }
@@ -35,7 +35,7 @@ bitfield! {
     /// FIFO data input/output
     #[derive(Clone, Copy, PartialEq, Eq)]
     #[register(address = 0x01, default_u8 = 0x00)]
-    pub struct RegOpMode(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
+    pub struct RegOpMode(u8): Debug, FromStorage, IntoStorage, DerefStorage {
         pub mode: u8 [try_both Mode] @ 0..=2,
         pub low_frequency_mode_on: bool @ 3,
         pub modulation_type: u8 [try_both ModulationType] @ 5..=6,

@@ -9,7 +9,7 @@ bitfield! {
     /// LoRaTM base-band FIFO data input/output. FIFO is cleared and not accessible when device is in SLEEP mode
     #[derive(Clone, Copy, PartialEq, Eq)]
     #[register(address = 0x00, default_u8 = 0x00)]
-    pub struct RegFifo(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
+    pub struct RegFifo(u8): Debug, FromStorage, IntoStorage, DerefStorage {
         pub data: u8 @ ..,
     }
 }
@@ -17,7 +17,7 @@ bitfield! {
 bitfield! {
     #[derive(Clone, Copy, PartialEq, Eq)]
     #[register(address = 0x01, default_u8 = 0b1001)]
-    pub struct RegOpMode(pub u8): Debug, FromStorage, IntoStorage, DerefStorage {
+    pub struct RegOpMode(u8): Debug, FromStorage, IntoStorage, DerefStorage {
         /// Device modes
         pub mode: u8 [try_both Mode] @ 0..=2,
         pub low_frequency_mode_on: bool @ 3,

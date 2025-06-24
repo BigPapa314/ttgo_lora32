@@ -1,5 +1,14 @@
 [workspace]
-members = ["blinky", "ttgo_blinky", "ttgo_ssd1306", "sx127x_rs", "ttgo_sx1276"]
+members = [
+    "blinky",
+    "sx127x/sx127x_rs_driver",
+    "sx127x/sx127x_rs_lora",
+    "sx127x/sx127x_rs_macro",
+    "sx127x/sx127x_rs",
+    "ttgo_blinky",
+    "ttgo_ssd1306",
+    "ttgo_sx1276",
+]
 default-members = []
 resolver = "3"
 
