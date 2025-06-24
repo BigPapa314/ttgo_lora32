@@ -4,6 +4,7 @@ use esp_idf_svc::hal::peripherals::Peripherals;
 use esp_idf_svc::hal::prelude::*;
 use esp_idf_svc::hal::spi::*;
 
+use sx127x_rs::driver::Sx127x;
 use sx127x_rs::prelude::*;
 
 fn main() {
@@ -38,12 +39,12 @@ fn main() {
 
     log::info!("spistuff");
 
-    let driver = Sx127xDriver::new(FreeRtos, spi, rst).unwrap();
-    let lora = driver.into_lora();
+    let driver = Sx127xDriver::new(FreeRtos, spi, rst);
+    let lora = driver.into_lora().unwrap();
     test_lora(lora);
 }
 
-pub fn test_lora(mut lora: impl Sx127xLora) {
+pub fn test_lora<T: Sx127x>(mut lora: Sx127xLoraProtocolSleep<T>) {
     log::info!("Test start!");
 
     lora.check_version().expect("version is not known");

@@ -17,10 +17,8 @@ where
     SPI: spi::SpiDevice,
     RESET: digital::OutputPin,
 {
-    pub fn new(delay: DELAY, spi: SPI, reset: RESET) -> Result<Self, Sx127xError> {
-        let mut driver = Self { delay, spi, reset };
-        driver.reset()?;
-        Ok(driver)
+    pub fn new(delay: DELAY, spi: SPI, reset: RESET) -> Self {
+        Self { delay, spi, reset }
     }
 }
 
