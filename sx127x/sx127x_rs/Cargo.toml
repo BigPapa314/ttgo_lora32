@@ -5,6 +5,10 @@ edition = "2024"
 keywords = ["embedded-hal", "sx127x", "lora"]
 license = "MIT"
 
+[features]
+default = ["lora"]
+lora = ["dep:sx127x_rs_lora"]
+
 [dependencies]
 sx127x_rs_driver = { version = "0.1.0", path = "../sx127x_rs_driver" }
-sx127x_rs_lora = { version = "0.1.0", path = "../sx127x_rs_lora" }
+sx127x_rs_lora = { version = "0.1.0", path = "../sx127x_rs_lora", optional = true }
