@@ -25,15 +25,24 @@ pub trait Sx127x {
         self.write_buffer(register.address(), register.as_ref())
     }
 
-    fn read_register<Reg, MakeRegister>(
+    fn update<Reg, UpdateRegister>(
         &mut self,
-        make_register: MakeRegister,
-    ) -> Result<Reg, Sx127xError>
+        update_register: UpdateRegister,
+    ) -> Result<(), Sx127xError>
     where
-        Reg: Register,
-        MakeRegister: FnOnce(u8) -> Reg,
+        Reg: Register + From<u8>,
+        UpdateRegister: FnOnce(&mut Reg),
     {
-        let mut result = make_register(0);
+        let mut register = self.read_register::<Reg>()?;
+        update_register(&mut register);
+        self.write(&register)
+    }
+
+    fn read_register<Reg>(&mut self) -> Result<Reg, Sx127xError>
+    where
+        Reg: Register + From<u8>,
+    {
+        let mut result: Reg = 0.into();
         self.read_buffer(result.address(), result.as_mut())?;
         Ok(result)
     }

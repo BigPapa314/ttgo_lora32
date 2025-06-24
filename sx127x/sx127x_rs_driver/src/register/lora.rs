@@ -22,7 +22,7 @@ bitfield! {
         pub mode: u8 [try_both Mode] @ 0..=2,
         pub low_frequency_mode_on: bool @ 3,
         pub access_shared_reg: bool @ 6,
-        pub long_range_mode: bool @ 7
+        pub lora_mode: bool @ 7
     }
 }
 
